@@ -1,1 +1,716 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost
+  description: Generated server url
+paths:
+  /bank/api/user/update:
+    post:
+      tags:
+      - Администрирование пользователей
+      summary: Обновить пользователя
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /bank/api/user-cards/transfer:
+    post:
+      tags:
+      - Управление картами пользователя
+      summary: Запрос на перевод между своими картами
+      operationId: cardTransfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /bank/api/card/set-new-status:
+    post:
+      tags:
+      - Управление картами
+      summary: "Активация, блокировка, удаление карты"
+      operationId: changeCardStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardStatusChangeRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+  /bank/api/card/create:
+    post:
+      tags:
+      - Управление картами
+      summary: Создание карты
+      operationId: createCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardCreateRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+  /bank/api/auth/sign-up:
+    post:
+      tags:
+      - Аутентификация
+      summary: Регистрация пользователя
+      operationId: signUp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JwtAuthenticationResponse'
+  /bank/api/auth/sign-in:
+    post:
+      tags:
+      - Аутентификация
+      summary: Авторизация пользователя
+      operationId: signIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/JwtAuthenticationResponse'
+  /bank/api/user/get-filtered-page:
+    get:
+      tags:
+      - Администрирование пользователей
+      summary: Получение пользователей карт по фильтрам
+      operationId: getUsersPage
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: username
+        in: query
+        description: Email пользователя
+        required: false
+        schema:
+          type: string
+          description: Email пользователя
+      - name: isActive
+        in: query
+        description: Статус пользователя
+        required: false
+        schema:
+          type: string
+          description: Статус пользователя
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageUserResponse'
+  /bank/api/user-cards/get-filtered-page:
+    get:
+      tags:
+      - Управление картами пользователя
+      summary: Получение всех карт по фильтрам
+      operationId: getCardsPage
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: username
+        in: query
+        description: Email пользователя
+        required: false
+        schema:
+          type: string
+          description: Email пользователя
+      - name: statuses
+        in: query
+        description: Статус карты
+        required: false
+        schema:
+          type: string
+          description: Статус карты
+      - name: hasBlockRequest
+        in: query
+        description: Наличие флага запроса блокировки
+        required: false
+        schema:
+          type: string
+          description: Наличие флага запроса блокировки
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCardResponse'
+  /bank/api/user-cards/block/{cardId}:
+    get:
+      tags:
+      - Управление картами пользователя
+      summary: Запрос на блокировку карты по ID
+      operationId: requestCardBlock
+      parameters:
+      - name: cardId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CardResponse'
+  /bank/api/user-cards/balance/{number}:
+    get:
+      tags:
+      - Управление картами пользователя
+      summary: Получение баланса карты по номеру
+      operationId: getCardsPage_1
+      parameters:
+      - name: number
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+  /bank/api/card/get-filtered-page:
+    get:
+      tags:
+      - Управление картами
+      summary: Получение всех карт по фильтрам
+      operationId: getCardsPage_2
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: username
+        in: query
+        description: Email пользователя
+        required: false
+        schema:
+          type: string
+          description: Email пользователя
+      - name: statuses
+        in: query
+        description: Статус карты
+        required: false
+        schema:
+          type: string
+          description: Статус карты
+      - name: hasBlockRequest
+        in: query
+        description: Наличие флага запроса блокировки
+        required: false
+        schema:
+          type: string
+          description: Наличие флага запроса блокировки
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCardResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: array
+          items:
+            type: string
+    UserUpdateRequest:
+      required:
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: ID пользователя
+          format: uuid
+        name:
+          maxLength: 50
+          minLength: 5
+          type: string
+          description: Имя пользователя
+        email:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Адрес электронной почты пользователя
+        active:
+          type: boolean
+        isActive:
+          type: boolean
+          description: Флаг удаления пользователя
+      description: Запрос на обновление данных пользователя
+    UserResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: ID пользователя
+          format: uuid
+        name:
+          type: string
+          description: имя пользователя
+        email:
+          type: string
+          description: Email пользователя
+        roles:
+          uniqueItems: true
+          type: array
+          description: роли пользователя
+          items:
+            type: string
+            description: роли пользователя
+        active:
+          type: boolean
+      description: Ответ с данными пользователя
+    TransferRequest:
+      required:
+      - sourceCardId
+      - targetCardId
+      - transferAmount
+      type: object
+      properties:
+        sourceCardId:
+          type: string
+          description: ID карты откуда совершается перевод
+          format: uuid
+        targetCardId:
+          type: string
+          description: ID карты куда совершается перевод
+          format: uuid
+        transferAmount:
+          maximum: 1000000.00
+          exclusiveMaximum: false
+          minimum: 0.01
+          exclusiveMinimum: false
+          type: number
+          description: сумма перевода
+      description: Запрос на перевод между картами
+    TransferResponse:
+      type: object
+      properties:
+        result:
+          type: string
+          description: Результат перевода (успех/отказ)
+        rejectionReason:
+          type: string
+          description: Причина отказа
+      description: Ответ при переводе между картами
+    CardStatusChangeRequest:
+      required:
+      - cardGuid
+      - newStatus
+      type: object
+      properties:
+        cardGuid:
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          type: string
+          description: ID карты
+        newStatus:
+          type: string
+          description: новый статус карты
+          enum:
+          - CREATED
+          - ACTIVE
+          - EXPIRED
+          - BLOCKED
+          - DELETED
+      description: Запрос на активацию карты
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID карты
+          format: uuid
+        number:
+          type: string
+          description: номер карты
+        cardHolderName:
+          type: string
+          description: имя владельца карты
+        cardHolderId:
+          type: string
+          description: ID владельца карты
+          format: uuid
+        validThrough:
+          type: object
+          properties:
+            year:
+              type: integer
+              format: int32
+            month:
+              type: string
+              enum:
+              - JANUARY
+              - FEBRUARY
+              - MARCH
+              - APRIL
+              - MAY
+              - JUNE
+              - JULY
+              - AUGUST
+              - SEPTEMBER
+              - OCTOBER
+              - NOVEMBER
+              - DECEMBER
+            monthValue:
+              type: integer
+              format: int32
+            leapYear:
+              type: boolean
+          description: действительна до
+        status:
+          type: string
+          description: статус карты
+        balance:
+          type: number
+          description: баланс карты
+        hasBlockRequest:
+          type: boolean
+          description: флаг запроса от пользователя на блокировку
+      description: Ответ с созданной картой
+    CardCreateRequest:
+      required:
+      - cardHolderGuid
+      type: object
+      properties:
+        cardHolderGuid:
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          type: string
+          description: ID владельца
+      description: Запрос на создание карты
+    SignUpRequest:
+      required:
+      - email
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 50
+          minLength: 5
+          type: string
+          description: Имя пользователя
+        email:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Адрес электронной почты
+        password:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Пароль
+      description: Запрос на регистрацию
+    JwtAuthenticationResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Токен доступа
+      description: Ответ с токеном доступа
+    SignInRequest:
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 50
+          minLength: 5
+          type: string
+          description: Имя пользователя
+        password:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Пароль
+      description: Запрос на аутентификацию
+    PageUserResponse:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+        paged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    PageCardResponse:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardResponse'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean

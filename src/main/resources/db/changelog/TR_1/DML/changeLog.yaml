@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 001-insert-admin.sql
+      relativeToChangelogFile: true

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: 001-alter-table-user_add-column-is_active.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 002-alter-table-card_add-column-has_block_request.sql
+      relativeToChangelogFile: true
+  - include:
+      file: 003-create-transfer-table.sql
+      relativeToChangelogFile: true
