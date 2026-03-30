@@ -34,9 +34,7 @@ public class CardServiceImpl implements CardService {
     private final UserRepository userRepository;
     private final CardSpecificationGenerator specificationGenerator;
     private final CardMapper mapper;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
 
     @Override

@@ -39,7 +39,7 @@ public class UserCardController {
 
     @Operation(summary = "Получение баланса карты по номеру")
     @GetMapping("/balance/{number}")
-    BigDecimal getCardsPage(@PathVariable(name = "number") Long number) {
+    BigDecimal getCardBalance(@PathVariable(name = "number") Long number) {
         return cardService.getCardBalance(number);
     }
 

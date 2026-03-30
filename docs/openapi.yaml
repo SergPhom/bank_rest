@@ -312,7 +312,7 @@ paths:
       tags:
       - Управление картами пользователя
       summary: Получение баланса карты по номеру
-      operationId: getCardsPage_1
+      operationId: getCardBalance
       parameters:
       - name: number
         in: path
@@ -338,7 +338,7 @@ paths:
       tags:
       - Управление картами
       summary: Получение всех карт по фильтрам
-      operationId: getCardsPage_2
+      operationId: getCardsPage_1
       parameters:
       - name: page
         in: query
@@ -626,12 +626,18 @@ components:
     PageUserResponse:
       type: object
       properties:
-        totalPages:
-          type: integer
-          format: int32
         totalElements:
           type: integer
           format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -644,12 +650,6 @@ components:
           format: int32
         sort:
           $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
-        last:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         numberOfElements:
           type: integer
           format: int32
@@ -663,16 +663,16 @@ components:
           format: int64
         sort:
           $ref: '#/components/schemas/SortObject'
-        pageNumber:
-          type: integer
-          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
         pageSize:
           type: integer
           format: int32
-        unpaged:
-          type: boolean
-        paged:
-          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
     SortObject:
       type: object
       properties:
@@ -685,12 +685,18 @@ components:
     PageCardResponse:
       type: object
       properties:
-        totalPages:
-          type: integer
-          format: int32
         totalElements:
           type: integer
           format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
         size:
           type: integer
           format: int32
@@ -703,12 +709,6 @@ components:
           format: int32
         sort:
           $ref: '#/components/schemas/SortObject'
-        first:
-          type: boolean
-        last:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         numberOfElements:
           type: integer
           format: int32
