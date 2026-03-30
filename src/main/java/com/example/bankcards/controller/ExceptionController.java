@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionController {
+    @ExceptionHandler(CardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleCardNotFoundException(CardNotFoundException ex) {
+        return new ErrorResponse("Ошибка поиска карты", LocalDateTime.now(),
+                List.of(ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -30,13 +37,6 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleNotReadableException(HttpMessageNotReadableException ex) {
         return new ErrorResponse("Ошибка чтения запроса", LocalDateTime.now(),
-                List.of(ex.getMessage(), ex.getCause().toString()));
-    }
-
-    @ExceptionHandler(CardNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleCardNotFoundException(CardNotFoundException ex) {
-        return new ErrorResponse("Ошибка поиска карты", LocalDateTime.now(),
                 List.of(ex.getMessage(), ex.getCause().toString()));
     }
 

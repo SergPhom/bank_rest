@@ -11,19 +11,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -38,16 +35,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserCardControllerTest extends BaseTester {
-    @Autowired
-    private UserCardController controller;
-
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                .build();
-
         UserDetails userDetails = User.withUsername("user@example.com")
                 .password("password")
                 .roles("USER")
@@ -162,5 +151,14 @@ class UserCardControllerTest extends BaseTester {
 
         JSONAssert.assertEquals("{\"result\":\"SUCCESS\",\"rejectionReason\":null}", result,
                 JSONCompareMode.LENIENT);
+    }
+
+    @Test
+    void transferWithException() throws Exception {
+        mockMvc
+                .perform(post("/bank/api/user-cards/transfer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"sourceCardId\":\"sourceCardId\",\"targetCardId\":\"targetCardId\",\"transferAmount\":\"amount\"}"))
+                .andExpect(status().is4xxClientError());
     }
 }

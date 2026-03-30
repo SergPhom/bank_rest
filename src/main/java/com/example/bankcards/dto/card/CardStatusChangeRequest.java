@@ -3,6 +3,7 @@ package com.example.bankcards.dto.card;
 import com.example.bankcards.entity.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,6 @@ public class CardStatusChangeRequest {
     private String cardGuid;
 
     @Schema(description = "новый статус карты")
-    @NotBlank(message = "новый статус карты не может быть пустым")
+    @NotNull(message = "новый статус карты не может быть пустым")
     private Status newStatus;
 }

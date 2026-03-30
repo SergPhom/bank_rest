@@ -19,6 +19,12 @@ paths:
               $ref: '#/components/schemas/UserUpdateRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -44,6 +50,12 @@ paths:
               $ref: '#/components/schemas/TransferRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -69,6 +81,12 @@ paths:
               $ref: '#/components/schemas/CardStatusChangeRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -94,6 +112,12 @@ paths:
               $ref: '#/components/schemas/CardCreateRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -119,6 +143,12 @@ paths:
               $ref: '#/components/schemas/SignUpRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -144,6 +174,12 @@ paths:
               $ref: '#/components/schemas/SignInRequest'
         required: true
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -203,6 +239,12 @@ paths:
           type: string
           description: Статус пользователя
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -269,6 +311,12 @@ paths:
           type: string
           description: Наличие флага запроса блокировки
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -295,6 +343,12 @@ paths:
           type: string
           format: uuid
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -321,6 +375,12 @@ paths:
           type: integer
           format: int64
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -387,6 +447,12 @@ paths:
           type: string
           description: Наличие флага запроса блокировки
       responses:
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "400":
           description: Bad Request
           content:
@@ -626,12 +692,12 @@ components:
     PageUserResponse:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
         pageable:
           $ref: '#/components/schemas/PageableObject'
         first:
@@ -663,14 +729,14 @@ components:
           format: int64
         sort:
           $ref: '#/components/schemas/SortObject'
+        pageNumber:
+          type: integer
+          format: int32
         paged:
           type: boolean
         unpaged:
           type: boolean
         pageSize:
-          type: integer
-          format: int32
-        pageNumber:
           type: integer
           format: int32
     SortObject:
@@ -685,12 +751,12 @@ components:
     PageCardResponse:
       type: object
       properties:
-        totalElements:
-          type: integer
-          format: int64
         totalPages:
           type: integer
           format: int32
+        totalElements:
+          type: integer
+          format: int64
         pageable:
           $ref: '#/components/schemas/PageableObject'
         first:

@@ -4,23 +4,20 @@ import com.example.bankcards.BaseTester;
 import com.example.bankcards.dto.user.UserUpdateRequest;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.Role;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -29,17 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest extends BaseTester {
-    @Autowired
-    private UserController controller;
-
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                .build();
-    }
-
     @Test
     void getUsersPage() throws Exception {
         var users = new ArrayList<User>();
@@ -68,11 +54,14 @@ class UserControllerTest extends BaseTester {
 
     @Test
     void updateUser() throws Exception {
+        var uuid = UUID.fromString("12345678-1234-1234-1234-123456789012");
         var request = UserUpdateRequest.builder()
+                .uuid(uuid)
                 .email("new@example.com")
                 .name("newName")
                 .build();
         var user = User.builder()
+                .id(uuid)
                 .roles(Set.of(Role.ROLE_USER))
                 .build();
 
@@ -85,7 +74,7 @@ class UserControllerTest extends BaseTester {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-        JSONAssert.assertEquals("{\"uuid\":null,\"name\":\"newName\",\"email\":\"new@example.com\"," +
-                "\"roles\":[\"ROLE_USER\"],\"active\":false}", result, JSONCompareMode.LENIENT);
+        JSONAssert.assertEquals("{\"uuid\":\"%s\",\"name\":\"newName\",".formatted(uuid) +
+                "\"email\":\"new@example.com\",\"roles\":[\"ROLE_USER\"],\"active\":false}", result, JSONCompareMode.LENIENT);
     }
 }

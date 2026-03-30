@@ -5,13 +5,12 @@ import com.example.bankcards.dto.auth.SignInRequest;
 import com.example.bankcards.dto.auth.SignUpRequest;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.Role;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,15 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthControllerTest extends BaseTester {
-    @Autowired
-    private AuthController authController;
-
-    @BeforeEach
-    void setup() {
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(authController)
-                .build();
-    }
 
     @Test
     void signUp() throws Exception {
@@ -44,9 +34,9 @@ class AuthControllerTest extends BaseTester {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJson(request)))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-        System.out.println(new String(response.getResponse().getContentAsByteArray()));
+        Assertions.assertTrue(response.matches(".*\"token\":\"([^\"]+)\".*"));
     }
 
     @Test
@@ -67,6 +57,8 @@ class AuthControllerTest extends BaseTester {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJson(request)))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+        Assertions.assertTrue(response.matches(".*\"token\":\"([^\"]+)\".*"));
     }
 }
