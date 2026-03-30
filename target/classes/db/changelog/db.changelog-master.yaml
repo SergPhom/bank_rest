@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: TR_1/changeLog.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: TR_2/changeLog.yaml
-      relativeToChangelogFile: true
